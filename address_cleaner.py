@@ -2,7 +2,7 @@ import re
 from addresses import *
 
 
-pattern = '(^(No|NO|no|#)*(\\s)*([0-9])+(\\s)*([a-z]|[A-Z])*)|((No|no|NO|#)*(\\s)*[0-9]+(\\s)*([a-z]|[A-Z])*$)'
+pattern = '(^(no|#)*(\\s|-)*([0-9])+(\\s)*(([a-z]{1}\\s|\\b))*)|((no|#)*(\\s|-)*[0-9]+(\\s)*([a-z]{1})*$)'
 
 
 def get_house_number(address, re_pattern):
@@ -16,17 +16,20 @@ def get_street(address,house_number):
 	street = address.replace(house_number, '')
 	return street.strip()
 
-def main():
-	re_pattern = re.compile(pattern)
+def main(addresses):
+	re_pattern = re.compile(pattern, re.IGNORECASE)
 	parsed_addresses = []
 	for entry in addresses:
 		house_number = get_house_number(entry, re_pattern)
 		street = get_street(entry, house_number)
-		parsed_addresses.append({'address': entry, 'house_number': house_number, 'street': street})
+		datum = {'address': entry, 'house_number': house_number, 'street': street}
+		print(datum)
+		parsed_addresses.append(datum)
 	return parsed_addresses
 
+
 if __name__ == '__main__':
-	main()
+	main(addresses)
 
 
 
